@@ -8,14 +8,15 @@
 
 class UInputMappingContext;
 class UInputDataConfig;
+class UWeaponComponent;
 
 UCLASS()
 class COP_HORROR_GAME_API APlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-public:
-	APlayerCharacter();
+protected:
+	void BeginPlay() override;
 
 public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -30,11 +31,24 @@ private:
 	UFUNCTION()
 	void Input_Crouch(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void Input_Shoot(const FInputActionValue& Value);
+
+	UFUNCTION()
+	void Input_Reload(const FInputActionValue& Value);
+
 private:
 	UPROPERTY(EditAnywhere, Category="Player Character|Input")
 	UInputMappingContext* InputContext = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "Player Character|Input")
 	UInputDataConfig* InputActions = nullptr;
+
+	UPROPERTY(VisibleDefaultsOnly)
+	UWeaponComponent* Weapon = nullptr;
+
+public:
+	UPROPERTY(BlueprintReadWrite)
+	bool bReloading = false;
 
 };

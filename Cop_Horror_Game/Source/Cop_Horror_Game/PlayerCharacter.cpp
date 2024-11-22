@@ -5,8 +5,14 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputDataConfig.h"
+#include "WeaponComponent.h"
 
-APlayerCharacter::APlayerCharacter() = default;
+void APlayerCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	Weapon = GetComponentByClass<UWeaponComponent>();
+}
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -27,6 +33,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(InputActions->Move, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Move);
 		EnhancedInputComponent->BindAction(InputActions->Look, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Look);
 		EnhancedInputComponent->BindAction(InputActions->Crouch, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Crouch);
+		EnhancedInputComponent->BindAction(InputActions->Shoot, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Shoot);
+		EnhancedInputComponent->BindAction(InputActions->Reload, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Reload);
 	}
 }
 
@@ -52,4 +60,20 @@ void APlayerCharacter::Input_Crouch(const FInputActionValue& Value)
 
 	if (BooleanValue) Crouch();
 	else UnCrouch();
+}
+
+void APlayerCharacter::Input_Shoot(const FInputActionValue& Value)
+{
+	if (IsValid(Weapon))
+	{
+		Weapon->Shoot();
+	}
+}
+
+void APlayerCharacter::Input_Reload(const FInputActionValue& Value)
+{
+	if (IsValid(Weapon))
+	{
+		bReloading = Weapon->Reload();
+	}
 }

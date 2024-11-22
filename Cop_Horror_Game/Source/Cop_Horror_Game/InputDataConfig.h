@@ -22,5 +22,11 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* Crouch;
+
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* Shoot;
+
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* Reload;
 	
 };
