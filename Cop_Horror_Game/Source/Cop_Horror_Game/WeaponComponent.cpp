@@ -2,6 +2,8 @@
 
 
 #include "WeaponComponent.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 
 void UWeaponComponent::BeginPlay()
 {
@@ -15,6 +17,9 @@ void UWeaponComponent::Shoot()
 	CurrentAmmo = FMath::Clamp(CurrentAmmo - 1, 0, MaxAmmo);
 
 	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Green, "Weapon::Shoot");
+
+	FVector MuzzleFlashPivot = GetRightVector() * MuzzleFlashOffset.X + GetForwardVector() * MuzzleFlashOffset.Y + GetUpVector() * MuzzleFlashOffset.Z;
+	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, MuzzleFlashFX, GetComponentLocation() + MuzzleFlashPivot);
 }
 
 bool UWeaponComponent::Reload()

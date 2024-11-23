@@ -6,6 +6,8 @@
 #include "Components/StaticMeshComponent.h"
 #include "WeaponComponent.generated.h"
 
+class UNiagaraSystem;
+
 /**
  * 
  */
@@ -19,6 +21,8 @@ protected:
 
 public:
 	void Shoot();
+
+	// @returns Whether the reload was successful or not.
 	bool Reload();
 
 private:
@@ -27,5 +31,11 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	int CurrentAmmo = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UNiagaraSystem* MuzzleFlashFX = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	FVector MuzzleFlashOffset = FVector::ZeroVector;
 
 };
