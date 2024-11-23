@@ -21,6 +21,9 @@ protected:
 public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	UWeaponComponent* GetWeapon() { return Weapon; }
+
 private:
 	UFUNCTION()
 	void Input_Move(const FInputActionValue& Value);
@@ -46,9 +49,5 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 	UWeaponComponent* Weapon = nullptr;
-
-public:
-	UPROPERTY(BlueprintReadWrite)
-	bool bReloading = false;
 
 };

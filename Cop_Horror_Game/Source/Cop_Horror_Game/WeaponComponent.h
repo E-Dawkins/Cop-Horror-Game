@@ -21,9 +21,7 @@ protected:
 
 public:
 	void Shoot();
-
-	// @returns Whether the reload was successful or not.
-	bool Reload();
+	void Reload();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Weapon", meta = (ClampMin = "1"))
@@ -32,10 +30,26 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Weapon")
 	int CurrentAmmo = 0;
 
+	UPROPERTY(EditAnywhere, Category = "Weapon", meta = (ClampMin = "100")) // in meters
+	float Range = 1000.f;
+
 	UPROPERTY(EditAnywhere, Category = "Weapon")
 	UNiagaraSystem* MuzzleFlashFX = nullptr;
 
-	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UPROPERTY(EditAnywhere, Category = "Weapon") // along weapons' local XYZ axes
 	FVector MuzzleFlashOffset = FVector::ZeroVector;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UNiagaraSystem* BulletImpactFX = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	UMaterialInterface* BulletImpactDecal = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Weapon")
+	FVector DecalSize = FVector(2, 4, 4);
+
+public:
+	UPROPERTY(BlueprintReadWrite)
+	bool bReloading = false;
 
 };

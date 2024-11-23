@@ -74,6 +74,6 @@ void APlayerCharacter::Input_Reload(const FInputActionValue& Value)
 {
 	if (IsValid(Weapon))
 	{
-		bReloading = Weapon->Reload();
+		Weapon->Reload();
 	}
 }
