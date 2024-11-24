@@ -49,7 +49,7 @@ private:
 	FVector DecalSize = FVector(2, 4, 4);
 
 public:
-	UPROPERTY(BlueprintReadWrite)
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Weapon")
 	bool bReloading = false;
 
 };

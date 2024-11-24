@@ -9,6 +9,7 @@
 class UInputMappingContext;
 class UInputDataConfig;
 class UWeaponComponent;
+class USpotLightComponent;
 
 UCLASS()
 class COP_HORROR_GAME_API APlayerCharacter : public ACharacter
@@ -40,6 +41,9 @@ private:
 	UFUNCTION()
 	void Input_Reload(const FInputActionValue& Value);
 
+	UFUNCTION()
+	void Input_ToggleTorch(const FInputActionValue& Value);
+
 private:
 	UPROPERTY(EditAnywhere, Category="Player Character|Input")
 	UInputMappingContext* InputContext = nullptr;
@@ -49,5 +53,8 @@ private:
 
 	UPROPERTY(VisibleDefaultsOnly)
 	UWeaponComponent* Weapon = nullptr;
+
+	UPROPERTY(VisibleDefaultsOnly)
+	USpotLightComponent* Torch = nullptr;
 
 };

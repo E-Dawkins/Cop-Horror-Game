@@ -29,4 +29,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* Reload;
 	
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* Torch;
+
 };

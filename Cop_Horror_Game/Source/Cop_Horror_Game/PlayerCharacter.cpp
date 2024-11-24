@@ -6,12 +6,14 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputDataConfig.h"
 #include "WeaponComponent.h"
+#include "Components/SpotLightComponent.h"
 
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
 	Weapon = GetComponentByClass<UWeaponComponent>();
+	Torch = GetComponentByClass<USpotLightComponent>();
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -35,6 +37,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(InputActions->Crouch, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Crouch);
 		EnhancedInputComponent->BindAction(InputActions->Shoot, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Shoot);
 		EnhancedInputComponent->BindAction(InputActions->Reload, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Reload);
+		EnhancedInputComponent->BindAction(InputActions->Torch, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_ToggleTorch);
 	}
 }
 
@@ -75,5 +78,13 @@ void APlayerCharacter::Input_Reload(const FInputActionValue& Value)
 	if (IsValid(Weapon))
 	{
 		Weapon->Reload();
+	}
+}
+
+void APlayerCharacter::Input_ToggleTorch(const FInputActionValue& Value)
+{
+	if (IsValid(Torch))
+	{
+		Torch->SetVisibility(!Torch->IsVisible(), true);
 	}
 }
