@@ -3,6 +3,7 @@
 
 #include "WeaponComponent.h"
 #include "NiagaraSystem.h"
+#include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/DecalComponent.h"
@@ -30,7 +31,10 @@ void UWeaponComponent::Shoot()
 
 	// Spawn muzzle flash FX
 	FVector MuzzleFlashPivot = GetRightVector() * MuzzleFlashOffset.X + GetForwardVector() * MuzzleFlashOffset.Y + GetUpVector() * MuzzleFlashOffset.Z;
-	UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, MuzzleFlashFX, GetComponentLocation() + MuzzleFlashPivot);
+	if (UNiagaraComponent* MuzzleFlashComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, MuzzleFlashFX, GetComponentLocation() + MuzzleFlashPivot))
+	{
+		MuzzleFlashComp->FirstPersonPrimitiveType = EFirstPersonPrimitiveType::FirstPerson;
+	}
 
 	// If bullet 'hit' something, spawn bullet hit FX
 	if (Hit.bBlockingHit)
