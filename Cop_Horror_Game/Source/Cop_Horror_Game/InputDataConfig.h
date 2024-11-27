@@ -32,4 +32,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	UInputAction* Torch;
 
+	UPROPERTY(EditDefaultsOnly)
+	UInputAction* Interact;
+
 };

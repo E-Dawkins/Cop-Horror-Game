@@ -7,6 +7,12 @@
 #include "InputDataConfig.h"
 #include "WeaponComponent.h"
 #include "Components/SpotLightComponent.h"
+#include "Interactable.h"
+
+APlayerCharacter::APlayerCharacter()
+{
+	PrimaryActorTick.bCanEverTick = true;
+}
 
 void APlayerCharacter::BeginPlay()
 {
@@ -14,6 +20,36 @@ void APlayerCharacter::BeginPlay()
 
 	Weapon = GetComponentByClass<UWeaponComponent>();
 	Torch = GetComponentByClass<USpotLightComponent>();
+}
+
+void APlayerCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	CheckForInteractable();
+}
+
+void APlayerCharacter::CheckForInteractable()
+{
+	FVector CameraLocation; FRotator CameraRotation;
+	GetWorld()->GetFirstPlayerController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+
+	FHitResult Hit;
+	GetWorld()->LineTraceSingleByChannel(Hit, CameraLocation, CameraLocation + CameraRotation.Vector() * InteractionDistance, ECC_Visibility);
+
+	// No longer looking at previous interactable
+	if (Hit.GetActor() != InteractableActor && IsValid(InteractableActor))
+	{
+		IInteractable::Execute_OnUnHover(InteractableActor);
+		InteractableActor = nullptr;
+	}
+
+	// Looking at new interactable
+	if (Hit.bBlockingHit && Hit.GetActor()->Implements<UInteractable>())
+	{
+		InteractableActor = Hit.GetActor();
+		IInteractable::Execute_OnHover(InteractableActor);
+	}
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -38,6 +74,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 		EnhancedInputComponent->BindAction(InputActions->Shoot, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Shoot);
 		EnhancedInputComponent->BindAction(InputActions->Reload, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Reload);
 		EnhancedInputComponent->BindAction(InputActions->Torch, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_ToggleTorch);
+		EnhancedInputComponent->BindAction(InputActions->Interact, ETriggerEvent::Triggered, this, &APlayerCharacter::Input_Interact);
 	}
 }
 
@@ -86,5 +123,13 @@ void APlayerCharacter::Input_ToggleTorch(const FInputActionValue& Value)
 	if (IsValid(Torch))
 	{
 		Torch->SetVisibility(!Torch->IsVisible(), true);
+	}
+}
+
+void APlayerCharacter::Input_Interact(const FInputActionValue& Value)
+{
+	if (IsValid(InteractableActor))
+	{
+		IInteractable::Execute_OnInteract(InteractableActor);
 	}
 }
