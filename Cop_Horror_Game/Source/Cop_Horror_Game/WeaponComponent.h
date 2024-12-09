@@ -52,4 +52,7 @@ public:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Weapon")
 	bool bReloading = false;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Weapon")
+	bool bShooting = false;
+
 };

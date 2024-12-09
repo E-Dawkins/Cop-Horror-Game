@@ -31,7 +31,7 @@ private:
 
 public:
 	UFUNCTION(BlueprintCallable)
-	UWeaponComponent* GetWeapon() { return Weapon; }
+	UWeaponComponent* GetWeapon() const { return Weapon; }
 
 private:
 	UFUNCTION()

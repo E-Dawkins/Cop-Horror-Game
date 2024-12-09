@@ -17,10 +17,11 @@ void UWeaponComponent::BeginPlay()
 
 void UWeaponComponent::Shoot()
 {
-	if (CurrentAmmo == 0 || bReloading)
+	if (CurrentAmmo == 0 || bReloading || bShooting)
 		return;
 
 	CurrentAmmo = FMath::Clamp(CurrentAmmo - 1, 0, MaxAmmo);
+	bShooting = true;
 
 	// Trace against environment
 	FVector CameraLocation; FRotator CameraRotation;
